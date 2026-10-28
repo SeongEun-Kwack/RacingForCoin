@@ -43,10 +43,19 @@ void UChatUI::OnChatInputTextCommitted(const FText& Text, ETextCommit::Type Comm
 		if(!Text.IsEmpty())
 		{
 			FString ChatMessage = Text.ToString();
+
 			EditableTextBox_ChatInput->SetText(FText::GetEmpty());
-			if (ACXPlayerController* PC = GetOwningPlayer<ACXPlayerController>())
+
+			ACXPlayerController* PC = GetOwningPlayer<ACXPlayerController>();
+			if (PC)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("[ChatUI] PC 찾음! CTSChatMessage 호출"));
 				PC->CTSChatMessage(ChatMessage);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("[ChatUI] GetOwningPlayer가 nullptr입니다!"));
+				// 임시 대안: GetWorld()->GetFirstPlayerController<ACXPlayerController>()
 			}
 		}
 	}
